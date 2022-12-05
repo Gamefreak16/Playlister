@@ -6,7 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
-import { Accordion, Card, CardHeader, Stack } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Card, CardContent, CardHeader, Stack, Typography } from '@mui/material';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -20,6 +20,7 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
+    const [expand, setExpand] = useState(false);
 
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
@@ -87,10 +88,20 @@ function ListCard(props) {
             }}
         >
             <Card sx={{width:'200%'}}>
-                <CardHeader title="Hello" />
-                {/* <Accordion> */}
+                <CardContent>
+                <Typography variant="h4" component="div">
+                {idNamePair.name}
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                author:
+                </Typography>
 
-                {/* </Accordion> */}
+                </CardContent>
+                
+                <Accordion expanded={expand} disableGutters={true}>
+                    <AccordionSummary></AccordionSummary>
+                    <AccordionDetails>Hello world</AccordionDetails>
+                </Accordion>
                 <Stack direction='row'>
                     <Box>Hello</Box>
                     <Box>Hello2</Box>
