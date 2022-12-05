@@ -6,7 +6,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
-import { Accordion, AccordionDetails, AccordionSummary, Card, CardContent, CardHeader, Stack, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Card, CardContent, CardHeader, Stack, Typography } from '@mui/material';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -36,10 +37,15 @@ function ListCard(props) {
         }
     }
 
+    function handleExpand(event){
+        setExpand(!expand);
+    }
+
     function handleToggleEdit(event) {
         event.stopPropagation();
         toggleEdit();
     }
+
 
     function toggleEdit() {
         let newActive = !editActive;
@@ -75,6 +81,14 @@ function ListCard(props) {
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
+    let publish = null;
+    let views = null;
+    if(true){
+        publish  = <><Typography>Published:</Typography><Typography>The Date</Typography></>;
+        views =  <><Typography>Listens:</Typography><Typography sx={{pr:'80px'}}>Number</Typography></>;
+    }
+
+
     let cardElement =
         <ListItem
             id={idNamePair._id}
@@ -83,9 +97,9 @@ function ListCard(props) {
             // style={{ width: '100%', fontSize: '48pt' }}
             className={"list-card"}
 
-            onClick={(event) => {
-                handleLoadList(event, idNamePair._id)
-            }}
+            // onClick={(event) => {
+            //     handleLoadList(event, idNamePair._id)
+            // }}
         >
             <Card sx={{width:'200%'}}>
                 <CardContent>
@@ -97,14 +111,23 @@ function ListCard(props) {
                 </Typography>
 
                 </CardContent>
-                
-                <Accordion expanded={expand} disableGutters={true}>
-                    <AccordionSummary></AccordionSummary>
-                    <AccordionDetails>Hello world</AccordionDetails>
-                </Accordion>
-                <Stack direction='row'>
-                    <Box>Hello</Box>
-                    <Box>Hello2</Box>
+                {/* //render when true */}
+                {/* {accordion} */}
+                <div><Accordion expanded={expand} disableGutters={true} elevation={0} sx={{border:0, backgroundColor:"white"}}>
+        <AccordionSummary sx={{display:'none'}} disableGutters={true} disabled={true}></AccordionSummary>
+        <AccordionDetails>Hello world</AccordionDetails>
+        </Accordion></div>
+                <Stack direction='row' spacing={"auto"} justifyContent="center">
+                    <Stack direction={'row'} sx={{pl:'10px'}}>
+                        
+                        {publish}
+                    </Stack>
+                    <Stack direction={'row'} sx={{pr:'20px'}}>
+                        {views}
+                        <Button onClick={handleExpand} sx={{mt:'-7px'}}>
+                            <KeyboardArrowDownIcon/>
+                        </Button>
+                    </Stack>
                 </Stack>
                 {/* <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
                 <Box sx={{ p: 1 }}>

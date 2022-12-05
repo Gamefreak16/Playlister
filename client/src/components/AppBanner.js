@@ -15,6 +15,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import zIndex from '@mui/material/styles/zIndex';
 import { useEffect } from 'react';
+import { height } from '@mui/system';
 
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
@@ -102,9 +103,9 @@ export default function AppBanner() {
     }
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1}}>
             <AppBar position="static">
-                <Toolbar>
+                <Toolbar >
                     
                     <Box sx={{ display: { xs: 'none', md: 'flex' } , zIndex:1, marginLeft:'-15px' }}>
                         <Link style={{ textDecoration: 'none', color: 'white' }} 
