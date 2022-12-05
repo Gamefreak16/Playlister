@@ -6,6 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
+import { Accordion, Card, CardHeader, Stack } from '@mui/material';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -77,27 +78,37 @@ function ListCard(props) {
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
-            sx={{ marginTop: '8px', display: 'flex', p: 1, bgcolor:'background.paper',border: 'thick double gray', borderRadius: '20px' }}
-            style={{ width: '100%', fontSize: '48pt' }}
+            // sx={{ marginTop: '8px', display: 'flex', p: 1, bgcolor:'background.paper',border: 'thick double gray', borderRadius: '20px' }}
+            // style={{ width: '100%', fontSize: '48pt' }}
             className={"list-card"}
-            button
+
             onClick={(event) => {
                 handleLoadList(event, idNamePair._id)
             }}
         >
-            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                    <EditIcon style={{fontSize:'48pt'}} />
-                </IconButton>
-            </Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={(event) => {
-                        handleDeleteList(event, idNamePair._id)
-                    }} aria-label='delete'>
-                    <DeleteIcon style={{fontSize:'48pt'}} />
-                </IconButton>
-            </Box>
+            <Card sx={{width:'200%'}}>
+                <CardHeader title="Hello" />
+                {/* <Accordion> */}
+
+                {/* </Accordion> */}
+                <Stack direction='row'>
+                    <Box>Hello</Box>
+                    <Box>Hello2</Box>
+                </Stack>
+                {/* <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+                <Box sx={{ p: 1 }}>
+                    <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                        <EditIcon style={{fontSize:'48pt'}} />
+                    </IconButton>
+                </Box>
+                <Box sx={{ p: 1 }}>
+                    <IconButton onClick={(event) => {
+                            handleDeleteList(event, idNamePair._id)
+                        }} aria-label='delete'>
+                        <DeleteIcon style={{fontSize:'48pt'}} />
+                    </IconButton>
+                </Box> */}
+            </Card>
         </ListItem>
 
     if (editActive) {

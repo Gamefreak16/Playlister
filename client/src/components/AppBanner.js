@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { Link } from 'react-router-dom'
 import AuthContext from '../auth';
 import { GlobalStoreContext } from '../store'
@@ -14,12 +14,20 @@ import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import zIndex from '@mui/material/styles/zIndex';
+import { useEffect } from 'react';
 
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
+
+    const imgRef = useRef();
+    useEffect(() => {
+        const imgElement = imgRef.current;
+        // Re-fetch the image when the img element changes
+        imgElement.src = imgElement.src;
+    }, [imgRef]);
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -97,22 +105,15 @@ export default function AppBanner() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
                 <Toolbar>
-                    <Typography                        
-                        variant="h4"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' }, padding:'15px 0'}}                        
-                    >
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } , zIndex:1 }}>
+                    
+                    <Box sx={{ display: { xs: 'none', md: 'flex' } , zIndex:1, marginLeft:'-15px' }}>
                         <Link style={{ textDecoration: 'none', color: 'white' }} 
                         onClick={() => {
                             store.closeCurrentList()
                         }}
-                        to='/'>⌂
-                        </Link>
-                        
+                        to='/'><img ref={imgRef} src={'playlisterlogo.png'} alt='Playlister Logo I swear, just dont look here' width="auto" height="60" />
+                        </Link>  
                     </Box>  
-                    </Typography>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } , zIndex:1 }}>
                         <IconButton

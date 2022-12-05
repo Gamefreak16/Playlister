@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
+import ViewWindow from './ViewWindow'
 
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab'
@@ -25,7 +26,7 @@ const HomeScreen = () => {
     let listCard = "";
     if (store) {
         listCard = 
-            <List sx={{ width: '90%', left: '5%', }}>
+            <List sx={{ width: '95%' }}>
             {
                 store.idNamePairs.map((pair) => (
                     <ListCard
@@ -58,6 +59,13 @@ const HomeScreen = () => {
                     listCard
                 }
                 <MUIDeleteModal />
+            </div>
+            <div id='view-window'
+            style={{backgroundColor:'#FFc4e4'}}>
+                {
+                    <ViewWindow/>
+                }
+            
             </div>
         </div>)
 }
