@@ -3,6 +3,7 @@ import { GlobalStoreContext } from '../store'
 import Fab from '@mui/material/Fab'
 import DeleteIcon from '@mui/icons-material/Delete';
 import { fontSize } from '@mui/system';
+import { Box } from '@mui/material';
 
 
 function SongCard(props) {
@@ -42,14 +43,16 @@ function SongCard(props) {
     }
     function handleClick(event) {
         // DOUBLE CLICK IS FOR SONG EDITING
+        event.stopPropagation()
         if (event.detail === 2) {
+            event.preventDefault();
             store.showEditSongModal(index, song);
         }
     }
-
+    
     let cardClass = "list-card unselected-list-card";
     return (
-        <div
+        <Box
             key={index}
             id={'song-' + index + '-card'}
             className={cardClass}
@@ -59,7 +62,10 @@ function SongCard(props) {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             draggable="true"
-            onClick={handleClick}
+            onClick={(event) => {
+                // handleLoadList(event, idNamePair._id)
+                handleClick(event)
+            }}
         >
             {index + 1}.
             <a
@@ -78,7 +84,7 @@ function SongCard(props) {
             >
                 {"\u2715"}
             </Fab>
-        </div>
+        </Box>
     );
 }
 

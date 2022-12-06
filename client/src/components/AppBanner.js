@@ -23,12 +23,26 @@ export default function AppBanner() {
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
 
-    const imgRef = useRef();
-    useEffect(() => {
-        const imgElement = imgRef.current;
-        // Re-fetch the image when the img element changes
-        imgElement.src = imgElement.src;
-    }, [imgRef]);
+    // const imgRef = useRef();
+    // useEffect(() => {
+    //     const imgElement = imgRef.current;
+    //     // Re-fetch the image when the img element changes
+    //     imgElement.src = imgElement.src;
+    // }, [imgRef]);
+
+//     const imgRef = useRef();
+
+//   useEffect(() => {
+//     // Check if the image is loaded
+    
+//     if (imgRef.current.complete) {
+//       console.log('Image is loaded');
+//     } else {
+//       console.log('Image is not loaded');
+//       console.log(imgRef.current.src);
+//       imgRef.current.src = 'playlisterlogo.png';
+//     }
+//   }, []);
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -84,14 +98,15 @@ export default function AppBanner() {
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>        
 
-    let editToolbar = "";
+    // let editToolbar = "";
     let menu = loggedOutMenu;
     if (auth.loggedIn) {
         menu = loggedInMenu;
-        if (store.currentList) {
-            editToolbar = <EditToolbar />;
-        }
     }
+    //     if (store.currentList) {
+    //         editToolbar = <EditToolbar />;
+    //     }
+    // }
     
     function getAccountMenu(loggedIn) {
         let userInitials = auth.getUserInitials();
@@ -102,20 +117,30 @@ export default function AppBanner() {
             return <AccountCircle />;
     }
 
+    let image = null;
+    
+
+    // useEffect(() => {
+    //     if(auth.loggedIn){
+    //         image = 'playlisterlogo.png'
+    //     }
+    // }, [auth.loggedIn]);
+
     return (
         <Box sx={{ flexGrow: 1}}>
             <AppBar position="static">
                 <Toolbar >
-                    
                     <Box sx={{ display: { xs: 'none', md: 'flex' } , zIndex:1, marginLeft:'-15px' }}>
                         <Link style={{ textDecoration: 'none', color: 'white' }} 
                         onClick={() => {
                             store.closeCurrentList()
                         }}
-                        to='/'><img ref={imgRef} src={'playlisterlogo.png'} alt='Playlister Logo I swear, just dont look here' width="auto" height="60" />
+                        to='/'>
+                            <Box id="LOGO" sx={{transform: 'translate(0px, 0px)'  ,height:'60px', width:'140px'}}  ></Box>
+                            {/* <img ref={imgRef} src={'playlisterlogo.png'} alt='Playlister' width="auto" height="60" /> */}
                         </Link>  
                     </Box>  
-                    <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
+                    <Box sx={{ flexGrow: 1 }}></Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } , zIndex:1 }}>
                         <IconButton
                             size="large"

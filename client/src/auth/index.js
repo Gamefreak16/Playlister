@@ -52,8 +52,8 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
-                    user: payload.user,
-                    loggedIn: true,
+                    user: null,
+                    loggedIn: false,
                     error: null
                 })
             }
@@ -72,6 +72,7 @@ function AuthContextProvider(props) {
     auth.getLoggedIn = async function () {
         const response = await api.getLoggedIn();
         if (response.status === 200) {
+            console.log("So this is" + response.data.user.username)
             authReducer({
                 type: AuthActionType.GET_LOGGED_IN,
                 payload: {
@@ -82,9 +83,9 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
+    auth.registerUser = async function(firstName, lastName, Username, email, password, passwordVerify) {
         try{
-            const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);
+            const response = await api.registerUser(firstName, lastName, Username, email, password, passwordVerify);
             if (response.status === 200) {
                 authReducer({
                     type: AuthActionType.REGISTER_USER,
@@ -92,7 +93,7 @@ function AuthContextProvider(props) {
                         user: response.data.user
                     }
                 })
-                history.push("/"); // was /login
+                history.push("/login/"); // was /login
             }
         }
         catch(err){

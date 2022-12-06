@@ -6,6 +6,7 @@ import MUIRemoveSongModal from './MUIRemoveSongModal'
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import { GlobalStoreContext } from '../store/index.js'
+import AddIcon from '@mui/icons-material/Add';
 /*
     This React component lets us edit a loaded list, which only
     happens when we are on the proper route.
@@ -42,11 +43,16 @@ function WorkspaceScreen() {
     else if (store.isRemoveSongModalOpen()) {
         modalJSX = <MUIRemoveSongModal />;
     }
+
+    function handleAddNewSong() {
+        store.addNewSong();
+    }
     useEffect(()=>{
         if(store.currentList === null){
             store.history.push('/')
         }
     }, [store.currentList])
+    console.log("Local List is" + store.currentList);
     if(store.currentList !== null){
     return (
        
@@ -65,6 +71,12 @@ function WorkspaceScreen() {
                     />
                 ))  
             }
+            <Box sx={{display:'flex', alignItems:'center', justifyContent:'center'}} className={"list-card unselected-list-card"}
+            id={'addSong'}
+            onClick={handleAddNewSong}
+            >  
+            <AddIcon fontSize='medium'/>
+            </Box>
          </List>            
          { modalJSX }
          </Box>
