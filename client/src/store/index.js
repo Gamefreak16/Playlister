@@ -393,6 +393,7 @@ function GlobalStoreContextProvider(props) {
             const response = await api.getPlaylistPairs();
             if (response.data.success) {
                 let pairsArray = response.data.idNamePairs;
+                console.log("Pairs" + pairsArray);
                 pairsArray.sort(store.sort);
                 storeReducer({
                     type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
@@ -471,7 +472,7 @@ function GlobalStoreContextProvider(props) {
 
     // THE FOLLOWING 8 FUNCTIONS ARE FOR COORDINATING THE UPDATING
     // OF A LIST, WHICH INCLUDES DEALING WITH THE TRANSACTION STACK. THE
-    // FUNCTIONS ARE setCurrentList, addMoveItemTransaction, addUpdateItemTransaction,
+    // FUNCTIONS ARE List, addMoveItemTransaction, addUpdateItemTransaction,
     // moveItem, updateItem, updateCurrentList, undo, and redo
     store.setCurrentList = function (id) {
         if(id === -1){
@@ -487,6 +488,7 @@ function GlobalStoreContextProvider(props) {
                     let playlist = response.data.playlist;
 
                     response = await api.updatePlaylistById(playlist._id, playlist);
+                    
                     if (response.data.success) {
                         storeReducer({
                             type: GlobalStoreActionType.SET_CURRENT_LIST,
@@ -626,6 +628,7 @@ function GlobalStoreContextProvider(props) {
     store.updateCurrentList = function() {
         async function asyncUpdateCurrentList() {
             const response = await api.updatePlaylistById(store.currentList._id, store.currentList);
+            console.log(store.currentList)
             if (response.data.success) {
                 storeReducer({
                     type: GlobalStoreActionType.SET_CURRENT_LIST,
@@ -635,6 +638,24 @@ function GlobalStoreContextProvider(props) {
         }
         asyncUpdateCurrentList();
     }
+
+    store.publishList = function() {
+        console.log(store.currentList)
+        store.currentList.published = true;
+        async function asyncUpdateCurrentList() {
+            const response = await api.updatePlaylistById(store.currentList._id, store.currentList);
+            console.log(store.currentList)
+            if (response.data.success) {
+                store.loadIdNamePairs();
+            }
+        }
+        asyncUpdateCurrentList();
+        // store.updateCurrentList();
+        // console.log("Here fucker")
+        
+    }
+
+
     store.undo = function () {
         tps.undoTransaction();
     }

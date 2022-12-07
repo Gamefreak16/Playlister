@@ -5,7 +5,7 @@ export default function SplashScreen() {
     return (
         <div id="splash-screen">
             
-            <img src='playlisterlogo.png' alt='Help'/>
+            <img src='listerlogo.png' alt='Help'/>
             <Box sx={{fontSize:'40pt', fontStyle: 'italic', textDecoration: 'underline', marginTop:'-20px'}}>
             <div>
             Welcome to playlister!

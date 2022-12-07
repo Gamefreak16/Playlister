@@ -76,7 +76,6 @@ function ListCard(props) {
             // CHANGE THE CURRENT LIST
             if(store.currentList !== null){
                 if(store.currentList._id === idNamePair._id){
-                    console.log("hereo")
                     store.closeCurrentList();
                 }
                 else{
@@ -92,10 +91,13 @@ function ListCard(props) {
         
     }
 
-    function handleUndo() {
+    function handleUndo(event) {
+        event.stopPropagation();
+
         store.undo();
     }
-    function handleRedo() {
+    function handleRedo(event) {
+        event.stopPropagation();
         store.redo();
     }
 
@@ -133,6 +135,13 @@ function ListCard(props) {
         setText(event.target.value);
     }
 
+    function publist(event){
+        event.stopPropagation();
+
+        // idNamePair.list.published = true;
+        store.publishList();
+    }
+
     let selectClass = "unselected-list-card";
     if (selected) {
         selectClass = "selected-list-card";
@@ -149,7 +158,7 @@ function ListCard(props) {
         views =  <><Typography>Listens:</Typography><Typography sx={{pr:'80px'}}>Number</Typography></>;
     }
     let tools = <>
-    <Stack direction={'row'} spacing={4} justifyContent="center" sx={{ml:'20px', pb:'20px'}}>
+    <Stack direction={'row'} spacing={2.1} justifyContent="center" sx={{ml:'20px', pb:'20px'}}>
         <Button 
             disabled={!store.canUndo()}
             id='undo-button'
@@ -167,9 +176,9 @@ function ListCard(props) {
 
 
         <Button 
-            disabled={!store.canRedo()}
+            disabled={idNamePair.list.published}
             id='redo-button'
-            //onClick={handleRedo}
+            onClick={publist}
             variant="contained">
                 Publish
         </Button>

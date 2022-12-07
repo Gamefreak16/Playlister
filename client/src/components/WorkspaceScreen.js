@@ -52,7 +52,6 @@ function WorkspaceScreen() {
             store.history.push('/')
         }
     }, [store.currentList])
-    console.log("Local List is" + store.currentList);
     if(store.currentList !== null){
     return (
        
