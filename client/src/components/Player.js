@@ -1,33 +1,44 @@
 import { GlobalStoreContext } from '../store/index.js'
-import React from 'react';
+import React, { useContext } from 'react';
 import YouTube from 'react-youtube';
 
 
 
 export default function Player () {
+    const { store } = useContext(GlobalStoreContext);
 
-    let playlist = [
-        "mqmxkGjow1A",
-        "8RbXIMZmVv8",
-        "8UbNbor3OqQ"
-    ];
+    
+    if(store.expandedList !== null){
+        console.log(store.expandedList.songs)
 
+        
+        
+    }
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
     let currentSong = 0;
 
     const playerOptions = {
-        height: '200',
-        width: '200',
+        height: '300',
+        width: '500',
         playerVars: {
             // https://developers.google.com/youtube/player_parameters
-            autoplay: 0,
+            autoplay: 1,
         },
     };
+
+    let currentS = [];
+    if(store.expandedList !== null){
+        store.expandedList.songs.forEach(element => currentS.push(element.youTubeId));
+    }
 
     // THIS FUNCTION LOADS THE CURRENT SONG INTO
     // THE PLAYER AND PLAYS IT
     function loadAndPlayCurrentSong(player) {
-        let song = playlist[currentSong];
+        let song = null;
+        if(store.expandedList !== null){
+            song = store.expandedList.songs[currentSong].youTubeId
+            
+        }
         player.loadVideoById(song);
         player.playVideo();
     }
@@ -35,7 +46,7 @@ export default function Player () {
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
     function incSong() {
         currentSong++;
-        currentSong = currentSong % playlist.length;
+        //currentSong = currentSong % playlist.length;
     }
 
     function onPlayerReady(event) {
@@ -74,27 +85,12 @@ export default function Player () {
     }
 
     return <YouTube
-        videoId={playlist[currentSong]}
+        videoId={currentS[currentSong]}
         opts={playerOptions}
         onReady={onPlayerReady}
         onStateChange={onPlayerStateChange} />;
 
 
-
-    // return(
-
-    //     <div>
-    //         <p>Hello</p>
-
-
-
-
-
-
-
-    //     </div>
-
-    // )
 
 }
 

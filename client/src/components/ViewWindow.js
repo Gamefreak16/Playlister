@@ -4,11 +4,13 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-
-
+import FastRewindIcon from '@mui/icons-material/FastRewind';
+import FastForwardIcon from '@mui/icons-material/FastForward';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
 
 import { GlobalStoreContext } from '../store/index.js'
-import { Box, Tabs } from '@mui/material'
+import { Box, Stack, Tabs, Typography } from '@mui/material'
 import { TabsContext } from '@mui/base'
 import { useState } from 'react';
 
@@ -32,11 +34,26 @@ export default function ViewWindow () {
                 <Tab label="Comments" value="2" />
             </TabList>
             </Box>
-            <TabPanel value="1">Item One
-            <Player>
+            <TabPanel value="1" sx={{mt:'-15px'}}>
+            <Box sx={{alignItems:'center', textAlign:'center', verticalAlign:'center'}}>
+                <Player/>
+            </Box>
+            <Box>
+            <Typography>Playlist:</Typography>
+            <Typography>Song #:</Typography>
+            <Typography>Title:</Typography>
+            <Typography>Artist:</Typography>
+            </Box>
 
-                
-            </Player>
+            <Box sx={{alignItems:'center', textAlign:'center', verticalAlign:'center'}}>
+                <Stack direction={'row'}>
+                    <FastRewindIcon fontSize='large' />
+                    <StopIcon fontSize='large'/>
+                    <PlayArrowIcon fontSize='large'/>
+                    <FastForwardIcon fontSize='large'/>
+                    
+                </Stack>
+            </Box>
             
             
             </TabPanel>

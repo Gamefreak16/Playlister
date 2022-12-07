@@ -47,16 +47,6 @@ function ListCard(props) {
             
         }
     }
-    // if(selected){
-    //     setExpand(true);
-    // }
-    // else{
-    //     setExpand(false);
-    // }
-    // useEffect(()=>{
-    //     setExpand(false)
-
-    // }, [store.currentList])
     
 
     function handleExpand(event, id){
@@ -102,7 +92,11 @@ function ListCard(props) {
     }
 
     function handleToggleEdit(event) {
-        if(event.detail === 2){
+        if(event.detail === 1 && store.currentModal === "NONE"){
+            store.setExpandedList(idNamePair._id)
+
+        }
+        if(event.detail === 2 && store.currentModal === "NONE"){
             event.stopPropagation();
             toggleEdit();
         }
