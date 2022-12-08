@@ -57,7 +57,10 @@ export default function ViewWindow () {
             
             
             </TabPanel>
-            <TabPanel value="2">Item Two
+            <TabPanel value="2">
+                <Comments>
+                    
+                </Comments>
             
             
             </TabPanel>

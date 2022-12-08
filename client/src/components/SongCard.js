@@ -67,13 +67,13 @@ function SongCard(props) {
                 handleClick(event)
             }}
         >
-            {index + 1}.
-            <a
+            {index + 1}. {song.title} by {song.artist}
+            {/* <a
                 id={'song-' + index + '-link'}
                 className="song-link"
                 href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
                 {song.title} by {song.artist}
-            </a>
+            </a> */}
             <Fab 
                 color="primary" 
                 aria-label="delete"

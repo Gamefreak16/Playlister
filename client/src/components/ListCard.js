@@ -13,6 +13,10 @@ import EditToolbar from './EditToolbar';
 import RedoIcon from '@mui/icons-material/Redo';
 import UndoIcon from '@mui/icons-material/Undo';
 import AddIcon from '@mui/icons-material/Add';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
+import AuthContext from '../auth';
+
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -23,6 +27,7 @@ import AddIcon from '@mui/icons-material/Add';
 */
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
@@ -96,7 +101,7 @@ function ListCard(props) {
             store.setExpandedList(idNamePair._id)
 
         }
-        if(event.detail === 2 && store.currentModal === "NONE"){
+        if(event.detail === 2 && store.currentModal === "NONE" && !idNamePair.list.published){
             event.stopPropagation();
             toggleEdit();
         }
@@ -109,6 +114,16 @@ function ListCard(props) {
             store.setIsListNameEditActive();
         }
         setEditActive(newActive);
+    }
+
+    function handleLike(event){
+        event.stopPropagation()
+        store.likeList(idNamePair._id,idNamePair.list);
+    }
+
+    function handleDislike(event){
+        event.stopPropagation()
+        store.dislikeList(idNamePair._id,idNamePair.list)
     }
 
     async function handleDeleteList(event, id) {
@@ -147,9 +162,9 @@ function ListCard(props) {
     let publish = null;
     let views = null;
     //Implement when publish
-    if(false){
-        publish  = <><Typography>Published:</Typography><Typography>The Date</Typography></>;
-        views =  <><Typography>Listens:</Typography><Typography sx={{pr:'80px'}}>Number</Typography></>;
+    if(idNamePair.list.published){
+        publish  = <><Typography>Published:</Typography><Typography>{idNamePair.list.publishDate}</Typography></>;
+        views =  <><Typography>Listens:</Typography><Typography sx={{pr:'80px'}}>{idNamePair.list.listens}</Typography></>;
     }
     let tools = <>
     <Stack direction={'row'} spacing={2.1} justifyContent="center" sx={{ml:'20px', pb:'20px'}}>
@@ -186,7 +201,7 @@ function ListCard(props) {
                 Delete
         </Button>
         <Button 
-            disabled={!store.canRedo()}
+            disabled={true}
             id='redo-button'
             //onClick={handleRedo}
             variant="contained">
@@ -194,7 +209,38 @@ function ListCard(props) {
         </Button>
     </Stack>
 </>;
-    
+
+
+
+
+
+    let color = 'white';
+    if(idNamePair.list.published){
+        color = '#3dedc2'
+        tools = <>
+    <Stack direction={'row'} spacing={2.1} justifyContent="center" sx={{ml:'20px', pb:'20px'}}>
+        {auth.user.email === idNamePair.list.ownerEmail ? <Button 
+            //disabled={!store.canRedo()}
+            id='redo-button'
+            onClick={(event) => {
+                handleDeleteList(event, idNamePair._id)
+            }}
+            variant="contained">
+                Delete
+        </Button> : null}
+        <Button 
+            disabled={true}
+            id='redo-button'
+            //onClick={handleRedo}
+            variant="contained">
+                Duplicate
+        </Button>
+    </Stack>
+</>;
+    }
+
+
+
 
     let cardElement =
         <ListItem
@@ -209,7 +255,7 @@ function ListCard(props) {
                 handleToggleEdit(event)
             }}
         >
-            <Card sx={{width:'200%'}}>
+            <Card sx={{width:'200%', bgcolor:color}}>
                 <CardContent>
                 {editActive ? <TextField
                                 margin="normal"
@@ -227,13 +273,24 @@ function ListCard(props) {
                                 InputLabelProps={{style: {fontSize: 24}}}
                                 autoFocus
                             /> :
-                    <Typography variant="h4" component="div">
-                    {idNamePair.name}
-                    </Typography>
+                    <Stack direction={'row'}>
+                            <Typography variant="h4" component="div">
+                        {idNamePair.name}
+                        </Typography>
+                        {idNamePair.list.published ? <> <Button>
+                        <ThumbUpOffAltIcon fontSize='large' sx={{color:'gray'}} onClick={handleLike}></ThumbUpOffAltIcon>
+                        <Typography variant='h5'>{idNamePair.list.likes.length}</Typography>
+                        </Button>
+                        <Button>
+                            <ThumbDownOffAltIcon fontSize='large' sx={{color:'gray'}} onClick={handleDislike}></ThumbDownOffAltIcon>
+                            <Typography variant='h5'>{idNamePair.list.dislikes.length}</Typography>
+                        </Button></>: null}
+                    </Stack>
                 }
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                 author: {idNamePair.list.Username}
                 </Typography>
+                
 
                 </CardContent>
                 {/* //render when true */}
@@ -253,7 +310,18 @@ function ListCard(props) {
             // } */}
                 
             {/* </List> */}
+            {idNamePair.list.published ? 
+                <Box>
+                <List id="view-items">
+                {
+                    idNamePair.list.songs.map((song, index) => (
+                        <ListItem><Typography variant="h5">{(index+1) + '. ' + song.title}</Typography></ListItem>
+                    ))
+                }
+                </List>
+            </Box>  :
             <WorkspaceScreen/>
+            }
         </AccordionDetails>
             
         </Accordion></div>
@@ -305,6 +373,8 @@ function ListCard(props) {
     //             className='list-card'
     //             onKeyPress={handleKeyPress}
     //             onChange={handleUpdateText}
+    //             inputProps={{style: {fontSize: 48}}}
+    //             InputLabelProps={{style: {fontSize: 24}}}
     //             defaultValue={idNamePair.name}
     //             inputProps={{style: {fontSize: 48}}}
     //             InputLabelProps={{style: {fontSize: 24}}}

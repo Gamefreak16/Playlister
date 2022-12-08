@@ -35,7 +35,7 @@ export default function Player () {
     // THE PLAYER AND PLAYS IT
     function loadAndPlayCurrentSong(player) {
         let song = null;
-        if(store.expandedList !== null){
+        if(store.expandedList !== null && store.expandedList.length > 0){
             song = store.expandedList.songs[currentSong].youTubeId
             
         }

@@ -23,6 +23,8 @@ const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
+    const [editActive, setEditActive] = useState(false);
+    const [text, setText] = useState("");
 
     const menuId = 'search-song-menu';
     const handleMenuOpen = (event) => {
@@ -40,40 +42,47 @@ const HomeScreen = () => {
 
     const sortDate = (event) => {
         setAnchorEl(null);
-        store.sortIt(function(a,b){return a.list.createdAt.localeCompare(b.list.createdAt)});
+        store.sortIt(function(a,b){return a.list.publishDate.localeCompare(b.list.publishDate)});
     }
 
     const sortListen = (event) => {
         setAnchorEl(null);
-        store.sortIt(function(a,b){return a.name.localeCompare(b.name)});
+        store.sortIt(function(a,b){return b.list.listens - a.list.listens});
     }
 
     const sortLikes = (event) => {
         setAnchorEl(null);
-        store.sortIt(function(a,b){return a.playlist.likes.localeCompare(b.playlist.likes)});
+        console.log()
+        store.sortIt(function(a,b){return b.list.likes.length - a.list.likes.length});
     }
 
     const sortDislikes = (event) => {
         setAnchorEl(null);
-        store.sortIt(function(a,b){return a.playlist.dislikes.localeCompare(b.playlist.dislikes)});
+        store.sortIt(function(a,b){return b.list.dislikes.length - a.list.dislikes.length});
     }
 
-    // if(val === 1){
-    //     store.idNamePairs.sort(function(a,b){return a.name.localCompare(b.name)})
-    // }
-    // else if(val === 2){
-    //     store.idNamePairs.sort(function(a,b){return a.name.localCompare(b.name)})
-    // }
-    // else if(val === 3){
-    //     store.idNamePairs.sort(function(a,b){return a.name.localCompare(b.name)})
-    // }
-    // else if(val === 4){
-    //     store.idNamePairs.sort(function(a,b){return a.name.localCompare(b.name)})
-    // }
-    // else if(val === 5){
-    //     store.idNamePairs.sort(function(a,b){return a.name.localCompare(b.name)})
-    // }
+    const sortCreate = (event) => {
+        setAnchorEl(null);
+        store.sortIt(function(a,b){return a.list.createdAt.localeCompare(b.list.createdAt)});
+    }
 
+    const sortEdit = (event) => {
+        setAnchorEl(null);
+        store.sortIt(function(a,b){return b.list.updatedAt.localeCompare(a.list.updatedAt)});
+    }
+
+    
+
+    function setHome(){
+        store.setView(0);
+    }
+    function setAll(){
+        store.setView(1);
+
+    }
+    function setUser(){
+        store.setView(2);
+    }
 
 
     useEffect(() => {
@@ -84,6 +93,16 @@ const HomeScreen = () => {
         store.createNewList();
     }
 
+    function handleKeyPress(event) {
+        if (event.code === "Enter") {
+            let her = text;
+            setText("")
+            store.setSearch(text);
+        }
+    }
+    function handleUpdateText(event) {
+        setText(event.target.value);
+    }
 
     let listCard = "";
     if (store) {
@@ -111,12 +130,23 @@ const HomeScreen = () => {
                 <Box sx={{ display: { xs: 'none', md: 'flex' } , zIndex:1, marginLeft:'-15px' }}>
                     <Stack direction={'row'} spacing={4} sx={{mb:'5px'}}>
 
-                    <Button ><HomeIcon fontSize='large' sx={{color:'white'}}/></Button >
-                    <Button ><PersonIcon fontSize='large' sx={{color:'white'}}/></Button >
-                    <Button ><GroupsIcon fontSize='large' sx={{color:'white'}}/></Button >
+                    <Button onClick={setHome}><HomeIcon fontSize='large' sx={{color:'white'}}/></Button >
+                    <Button onClick={setAll}><GroupsIcon fontSize='large' sx={{color:'white'}}/></Button >
+                    <Button onClick={setUser}><PersonIcon fontSize='large' sx={{color:'white'}}/></Button >
+                    
                     </Stack>
                     </Box>  
-                    <Box sx={{ flexGrow: 1 }}></Box><TextField label="Search" sx={{bgcolor:'white', mr:'40px', mb:'5px', width:'300px'}}></TextField>
+                    <Box sx={{ flexGrow: 1 }}></Box>
+                    <TextField label="Search" 
+                    defaultValue={""} 
+                    sx={{bgcolor:'white', mr:'40px', mb:'10px', width:'400px', height:'55px'}}
+                    onKeyPress={handleKeyPress}
+                    onChange={handleUpdateText}
+                    inputProps={{style: {fontSize: 18}}}
+                    InputLabelProps={{style: {fontSize: 24}}}
+                    >
+
+                    </TextField>
                     <Box sx={{ display: { xs: 'none', md: 'flex' }, mb:'5px' }} onClick={handleMenuOpen}>
                         <Typography variant='h5' sx={{pr:'15px'}}>Sort By</Typography> <SortIcon fontSize='large' sx={{color:'white'}}/>
                     </Box>
@@ -138,16 +168,18 @@ const HomeScreen = () => {
                     >
                         <MenuItem onClick={sortName}>Name (A-Z)</MenuItem>
                         <MenuItem onClick={sortDate}>Publish Date (Newest)</MenuItem>
-                        <MenuItem onClick={sortListen}> (High - Low)</MenuItem>
+                        <MenuItem onClick={sortListen}>Listens (High - Low)</MenuItem>
                         <MenuItem onClick={sortLikes}>Likes (High - Low)</MenuItem>
-                        <MenuItem onClick={sortDislikes}>Dilikes (High - Low)</MenuItem>
+                        <MenuItem onClick={sortDislikes}>Disikes (High - Low)</MenuItem>
+                        <MenuItem onClick={sortCreate}>By Creation Date (Old - New)</MenuItem>
+                        <MenuItem onClick={sortEdit}>By Last Edit Date (New - Old)</MenuItem>
                     </Menu>
                 </Toolbar>
             </AppBar>
             
         </Box>
-            <div id="list-selector-heading"
-            style={{backgroundColor:'#95c4e453'}}>
+            {store.view === 0 ? <div id="list-selector-heading"
+            style={{backgroundColor:'#0c85a4'}}>
             <Fab 
                 color="primary" 
                 aria-label="add"
@@ -157,8 +189,12 @@ const HomeScreen = () => {
             >
                 <AddIcon />
             </Fab>
-                <Typography variant="h3">Your Lists</Typography>
-            </div>
+                <Typography variant="h3" color='white'>Your Lists</Typography>
+            </div> 
+            : <div id="list-selector-heading"
+            style={{backgroundColor:'#0c85a4'}}>
+            
+            </div> }
             <div id="list-selector-list"
             style={{backgroundColor:'#95c4e453'}}
             >
@@ -168,7 +204,7 @@ const HomeScreen = () => {
                 <MUIDeleteModal />
             </div>
             <div id='view-window'
-            style={{backgroundColor:'#FFc4e4'}}>
+            style={{backgroundColor:'#8dc1ce'}}>
                 {
                     <ViewWindow/>
                 }
