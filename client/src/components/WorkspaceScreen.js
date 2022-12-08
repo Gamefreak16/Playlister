@@ -44,7 +44,8 @@ function WorkspaceScreen() {
         modalJSX = <MUIRemoveSongModal />;
     }
 
-    function handleAddNewSong() {
+    function handleAddNewSong(event) {
+        event.stopPropagation();
         store.addNewSong();
     }
     useEffect(()=>{
