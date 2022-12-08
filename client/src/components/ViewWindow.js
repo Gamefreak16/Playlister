@@ -12,17 +12,21 @@ import StopIcon from '@mui/icons-material/Stop';
 import { GlobalStoreContext } from '../store/index.js'
 import { Box, Stack, Tabs, Typography } from '@mui/material'
 import { TabsContext } from '@mui/base'
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 
 
 export default function ViewWindow () {
-
+    const { store } = useContext(GlobalStoreContext);
     const [value, setValue] = useState('1');
-
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    let stats = {name:"?", index:"?", title:"?", artist:"?"}
+    if(store.expandedList !== null && store.expandedList.length > 0){
+        stats.name= store.expandedList.name
+    }
 
     return(
 
@@ -38,28 +42,13 @@ export default function ViewWindow () {
             <Box sx={{alignItems:'center', textAlign:'center', verticalAlign:'center'}}>
                 <Player/>
             </Box>
-            <Box>
-            <Typography>Playlist:</Typography>
-            <Typography>Song #:</Typography>
-            <Typography>Title:</Typography>
-            <Typography>Artist:</Typography>
-            </Box>
-
-            <Box sx={{alignItems:'center', textAlign:'center', verticalAlign:'center'}}>
-                <Stack direction={'row'}>
-                    <FastRewindIcon fontSize='large' />
-                    <StopIcon fontSize='large'/>
-                    <PlayArrowIcon fontSize='large'/>
-                    <FastForwardIcon fontSize='large'/>
-                    
-                </Stack>
-            </Box>
+            
             
             
             </TabPanel>
             <TabPanel value="2">
                 <Comments>
-                    
+
                 </Comments>
             
             

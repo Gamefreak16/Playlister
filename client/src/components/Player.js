@@ -1,13 +1,20 @@
 import { GlobalStoreContext } from '../store/index.js'
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import YouTube from 'react-youtube';
-
+import { Box, Button, Stack, Typography } from '@mui/material';
+import FastRewindIcon from '@mui/icons-material/FastRewind';
+import FastForwardIcon from '@mui/icons-material/FastForward';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
 
 
 export default function Player () {
     const { store } = useContext(GlobalStoreContext);
+    const [stats, setStats] = useState({name:"?", index:"?", title:"?", artist:"?"})
+    const [vid, setVid] = useState(null);
+    const [currentSong, setCurrent] = useState(0);
 
-    
+    // let currentSong = 0
     if(store.expandedList !== null){
         console.log(store.expandedList.songs)
 
@@ -15,7 +22,6 @@ export default function Player () {
         
     }
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
-    let currentSong = 0;
 
     const playerOptions = {
         height: '300',
@@ -29,15 +35,17 @@ export default function Player () {
     let currentS = [];
     if(store.expandedList !== null){
         store.expandedList.songs.forEach(element => currentS.push(element.youTubeId));
+        
     }
 
     // THIS FUNCTION LOADS THE CURRENT SONG INTO
     // THE PLAYER AND PLAYS IT
     function loadAndPlayCurrentSong(player) {
         let song = null;
-        if(store.expandedList !== null && store.expandedList.length > 0){
+        if(store.expandedList !== null && store.expandedList.songs.length > 0 && currentSong< store.expandedList.songs.length && currentSong > -1){
             song = store.expandedList.songs[currentSong].youTubeId
-            
+            stats.name = store.expandedList.name;
+            setStats({name:store.expandedList.name, index:(currentSong+1), title:store.expandedList.songs[currentSong].title, artist:store.expandedList.songs[currentSong].artist})
         }
         player.loadVideoById(song);
         player.playVideo();
@@ -45,11 +53,41 @@ export default function Player () {
 
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
     function incSong() {
-        currentSong++;
+        if(store.expandedList !== null && store.expandedList.songs.length > 0 && currentSong< store.expandedList.songs.length-1)
+        // currentSong++;
+        setCurrent(currentSong+1);
         //currentSong = currentSong % playlist.length;
     }
 
+    function nextSong(event){
+        console.log(currentSong)
+        if(store.expandedList !== null && store.expandedList.songs.length > 0 && currentSong< store.expandedList.songs.length-1)
+        // currentSong++;
+        setCurrent(currentSong+1);
+        console.log(currentSong)
+        loadAndPlayCurrentSong(vid)
+    }
+
+    function prevSong(event){
+        console.log(currentSong)
+        if(store.expandedList !== null && store.expandedList.songs.length > 0 && currentSong > 0)
+        // currentSong--;
+        setCurrent(currentSong-1)
+        console.log(currentSong)
+        loadAndPlayCurrentSong(vid)
+    }
+
+    function playSong(event){
+        vid.playVideo();
+    }
+
+    function stopSong(event){
+        vid.pauseVideo();
+    }
+
     function onPlayerReady(event) {
+        console.log("Here!")
+        setVid(event.target)
         loadAndPlayCurrentSong(event.target);
         event.target.playVideo();
     }
@@ -84,12 +122,28 @@ export default function Player () {
         }
     }
 
-    return <YouTube
+    return <Box><YouTube
         videoId={currentS[currentSong]}
         opts={playerOptions}
         onReady={onPlayerReady}
-        onStateChange={onPlayerStateChange} />;
+        onStateChange={onPlayerStateChange} />
+        <Box sx={{display:'flex', flexDirection:'column', alignItems:'left', textAlign:'left', }}>
+            <Typography>Playlist: {stats.name}</Typography>
+            <Typography>Song #: {stats.index}</Typography>
+            <Typography>Title: {stats.title}</Typography>
+            <Typography>Artist: {stats.artist}</Typography>
+            </Box>
 
+            <Box sx={{alignItems:'center', textAlign:'center', verticalAlign:'middle'}}>
+                <Stack direction={'row'} sx={{alignItems:'center', textAlign:'center', verticalAlign:'middle'}}>
+                   <Button onClick={prevSong}> <FastRewindIcon fontSize='large' /> </Button>
+                   <Button onClick={stopSong}> <StopIcon fontSize='large'/></Button>
+                    <Button onClick={playSong} >  <PlayArrowIcon fontSize='large'/></Button>
+                    <Button onClick={nextSong} >   <FastForwardIcon fontSize='large'/></Button>
+                    
+                </Stack>
+            </Box>
+        </Box>
 
 
 }
