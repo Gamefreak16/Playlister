@@ -1,7 +1,15 @@
 import { Box, Button, Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import { useContext } from 'react';
+import AuthContext from '../auth'
 
 export default function SplashScreen() {
+    const { auth } = useContext(AuthContext);
+
+    function guest(){
+        auth.loginGuest();
+    }
+
     return (
         <div id="splash-screen">
             
@@ -25,7 +33,7 @@ export default function SplashScreen() {
                 </Grid>
                 <Grid item xs={6}>
                 <Button disableElevation sx={{background:'linear-gradient(204deg, #77A5EE,#FCECFE)', 
-                    marginTop:'10px', marginLeft:'-30%', height:'100px', width:'200px'}}>
+                    marginTop:'10px', marginLeft:'-30%', height:'100px', width:'200px'}} onClick={guest}>
                 <Typography sx={{font: ' 0.9em "Times New Roman", Lexend Exa', fontSize:'22pt', fontStyle:'italic'}}>Continue As Guest</Typography>
 
                 </Button>

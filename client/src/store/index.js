@@ -422,6 +422,7 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
     store.loadIdNamePairs = function () {
         async function asyncLoadIdNamePairs() {
+            
             const response = await api.getPlaylistPairs(store.view);
             if (response.data.success) {
                 let pairsArray = response.data.idNamePairs;
@@ -748,6 +749,45 @@ function GlobalStoreContextProvider(props) {
         // store.updateCurrentList();
         // console.log("Here fucker")
         
+    }
+
+    store.dupe = async function(){
+        console.log(auth.user.Username)
+        console.log(auth.user.email)
+        const response = await api.createPlaylist("Copy of " + store.currentList.name, store.currentList.songs, auth.user.email, auth.user.Username);
+        console.log("createNewList response: " + response);
+        if (response.status === 201) {
+            tps.clearAllTransactions();
+            let newList = response.data.playlist;
+            storeReducer({
+                type: GlobalStoreActionType.CREATE_NEW_LIST,
+                payload: newList
+            }
+            );
+            console.log("here")
+            store.loadIdNamePairs();
+            console.log("hope")
+            store.newListCounter += 1;
+            // IF IT'S A VALID LIST THEN LET'S START EDITING IT
+            //history.push("/playlist/" + newList._id);
+        }
+        else {
+            console.log("API FAILED TO CREATE A NEW LIST");
+        }
+    }
+
+    store.newComment = function(text) {
+        let newCom = {username: auth.user.Username,text: text};
+        store.expandedList.comments.push(newCom);
+        async function asyncUpdateCurrentList() {
+            const response = await api.updatePlaylistById(store.expandedList._id, store.expandedList);
+            console.log(store.currentList)
+            if (response.data.success) {
+                store.loadIdNamePairs();
+            }
+        }
+        asyncUpdateCurrentList();
+
     }
 
 

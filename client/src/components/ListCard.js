@@ -151,6 +151,11 @@ function ListCard(props) {
         store.publishList();
     }
 
+    function duplicard(event){
+        event.stopPropagation();
+        store.dupe();
+    }
+
     let selectClass = "unselected-list-card";
     if (selected) {
         selectClass = "selected-list-card";
@@ -186,14 +191,14 @@ function ListCard(props) {
 
         <Button 
             disabled={idNamePair.list.published}
-            id='redo-button'
+            id='pub-button'
             onClick={publist}
             variant="contained">
                 Publish
         </Button>
         <Button 
             //disabled={!store.canRedo()}
-            id='redo-button'
+            id='del-button'
             onClick={(event) => {
                 handleDeleteList(event, idNamePair._id)
             }}
@@ -201,15 +206,14 @@ function ListCard(props) {
                 Delete
         </Button>
         <Button 
-            disabled={true}
-            id='redo-button'
-            //onClick={handleRedo}
+            // disabled={true}
+            id='dup-button'
+            onClick={duplicard}
             variant="contained">
                 Duplicate
         </Button>
     </Stack>
 </>;
-
 
 
 
@@ -221,7 +225,7 @@ function ListCard(props) {
     <Stack direction={'row'} spacing={2.1} justifyContent="center" sx={{ml:'20px', pb:'20px'}}>
         {auth.user.email === idNamePair.list.ownerEmail ? <Button 
             //disabled={!store.canRedo()}
-            id='redo-button'
+            id='del-button'
             onClick={(event) => {
                 handleDeleteList(event, idNamePair._id)
             }}
@@ -229,9 +233,9 @@ function ListCard(props) {
                 Delete
         </Button> : null}
         <Button 
-            disabled={true}
-            id='redo-button'
-            //onClick={handleRedo}
+            // disabled={true}
+            id='dup-button'
+            onClick={duplicard}
             variant="contained">
                 Duplicate
         </Button>
@@ -315,7 +319,7 @@ function ListCard(props) {
                 <List id="view-items">
                 {
                     idNamePair.list.songs.map((song, index) => (
-                        <ListItem><Typography variant="h5">{(index+1) + '. ' + song.title}</Typography></ListItem>
+                        <ListItem><Typography variant="h5">{(index+1) + '. ' + song.title + ' by ' + song.artist}</Typography></ListItem>
                     ))
                 }
                 </List>

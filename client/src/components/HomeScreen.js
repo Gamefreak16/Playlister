@@ -3,7 +3,7 @@ import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 import ViewWindow from './ViewWindow'
-
+import AuthContext from '../auth'
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
@@ -21,6 +21,7 @@ import SortIcon from '@mui/icons-material/Sort';
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
     const [editActive, setEditActive] = useState(false);
@@ -86,6 +87,8 @@ const HomeScreen = () => {
 
 
     useEffect(() => {
+        if(auth.isGuest){store.setView(1)}
+        else
         store.loadIdNamePairs();
     }, []);
 

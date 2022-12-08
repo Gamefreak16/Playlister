@@ -14,7 +14,7 @@ import SplashScreen from './SplashScreen'
 import Statusbar from './Statusbar'
 import WorkspaceScreen from './WorkspaceScreen'
 import ViewWindow from './ViewWindow'
-import Comments from './Comments'
+import CommentList from './CommentList'
 import Player from './Player'
 import CommentCard from './CommentCard'
 
@@ -42,6 +42,6 @@ export {
     WorkspaceScreen,
     ViewWindow,
     Player,
-    Comments,
+    CommentList,
     CommentCard
 }

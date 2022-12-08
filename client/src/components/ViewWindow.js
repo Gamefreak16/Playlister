@@ -1,4 +1,4 @@
-import Comments from './Comments.js'
+import CommentList from './CommentList.js'
 import Player from './Player.js'
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
@@ -47,9 +47,9 @@ export default function ViewWindow () {
             
             </TabPanel>
             <TabPanel value="2">
-                <Comments>
+                <CommentList>
 
-                </Comments>
+                </CommentList>
             
             
             </TabPanel>

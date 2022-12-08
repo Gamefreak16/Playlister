@@ -100,7 +100,7 @@ export default function AppBanner() {
 
     // let editToolbar = "";
     let menu = loggedOutMenu;
-    if (auth.loggedIn) {
+    if (auth.loggedIn && !auth.isGuest) {
         menu = loggedInMenu;
     }
     //     if (store.currentList) {
@@ -109,10 +109,12 @@ export default function AppBanner() {
     // }
     
     function getAccountMenu(loggedIn) {
-        let userInitials = auth.getUserInitials();
-        console.log("userInitials: " + userInitials);
-        if (loggedIn) 
+        
+        // console.log("userInitials: " + userInitials);
+        if (loggedIn && !auth.isGuest) {
+            let userInitials = auth.getUserInitials();
             return <div>{userInitials}</div>;
+        }
         else
             return <AccountCircle />;
     }
