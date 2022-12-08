@@ -24,9 +24,9 @@ const api = axios.create({
 // CUSTOM FILTERS FOR QUERIES
 
 export const getLoggedIn = () => api.get(`/loggedIn/`);
-export const loginUser = (Username, password) => {
+export const loginUser = (email, password) => {
     return api.post(`/login/`, {
-        Username : Username,
+        email : email,
         password : password
     })
 }

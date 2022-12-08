@@ -31,23 +31,23 @@ getLoggedIn = async (req, res) => {
 }
 
 loginUser = async (req, res) => {
-    console.log("loginUser");
+    console.log(req.body);
     try {
-        const { Username, password } = req.body;
+        const { email, password } = req.body;
 
-        if (!Username || !password) {
+        if (!email || !password) {
             return res
                 .status(400)
                 .json({ errorMessage: "Please enter all required fields." });
         }
 
-        const existingUser = await User.findOne({ Username: Username });
+        const existingUser = await User.findOne({ email: email });
         console.log("existingUser: " + existingUser);
         if (!existingUser) {
             return res
                 .status(401)
                 .json({
-                    errorMessage: "Wrong Username or password provided."
+                    errorMessage: "Wrong email or password provided."
                 })
         }
 
